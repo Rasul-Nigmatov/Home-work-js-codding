@@ -1,4 +1,4 @@
-const products = [
+  const products = [
   {
     id: 123,
     title: "Redmi Note 10 Pro",
