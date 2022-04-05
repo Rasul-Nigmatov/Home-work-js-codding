@@ -41,10 +41,20 @@ const renderProduct = function (prod) {
     const productingModel = document.createElement("p");
     productingModel.textContent = prod.model;
     productingModel.className = "bg-success";
-
-    appendChilderen(prodTel,[productingId, productingImg, productingTitle, productingPrice, productingIcon, productingDate, productingBenefits, productingOld, productingModel]);
-
+    const ProductMarker = document.createElement("div");
+    ProductMarker.className = "product-icon"
+    const productEdit = document.createElement("button");
+    productEdit.className = "btn-secondary";
+    const productDel = document.createElement("button");
+    productDel.className = "btn-danger";
+    const ProductIcon = document.createElement("i");
+    ProductIcon.className = "fa-pen";
+    s
+    
+    appendChilderen(prodTel,[productingId, productingImg, productingTitle, productingPrice, productingIcon, productingDate, productingBenefits, productingOld, productingModel,ProductMarker,productEdit,productDel,ProductIcon]);
+    
     return producting; 
+    
 }
 
 const prodTel = document.querySelector("#telephones");
@@ -56,6 +66,30 @@ for (let i = 0; i < products.length; i++) {
 
     prodTel.append(producting)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 const addForm = document.querySelector("#add-form");
@@ -96,3 +130,32 @@ addForm.addEventListener("submit", function(evt){
         prodTel.append(producting);
     }  
 });
+
+
+
+
+const input = document.querySelector("#benefits");
+
+const WrapperUl = document.querySelector(".mt-3");
+const WrapperLi = document.querySelector(".mb-1")
+
+const benefits = [];
+
+addEventListener("input", function() {
+    const splittedValue = input.value.trim().split(";");
+
+    if (splittedValue.length===2) {
+        benefits.push(splittedValue[2]);
+        input.value = "";
+
+        for (let i = 0; i < benefits.length; i++) {
+            const benefit = this.document.createElement("button");
+            benefit.textContent = benefits[i];
+            console.log(benefit);
+            benefit.append(benefits)  
+        }
+    }
+})
+
+
+
