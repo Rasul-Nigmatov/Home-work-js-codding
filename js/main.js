@@ -49,7 +49,7 @@ const renderProduct = function (prod) {
     productDel.className = "btn-danger";
     const ProductIcon = document.createElement("i");
     ProductIcon.className = "fa-pen";
-    s
+    
     
     appendChilderen(prodTel,[productingId, productingImg, productingTitle, productingPrice, productingIcon, productingDate, productingBenefits, productingOld, productingModel,ProductMarker,productEdit,productDel,ProductIcon]);
     
