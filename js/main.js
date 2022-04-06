@@ -17,21 +17,22 @@ const appendChilderen = function(parentElement, childeren) {
 }
 
 const renderProduct = function (prod) {
+    const{id, title, price, addedDate, benefits} = prod;
     const producting = document.createElement("li");
     producting.className = "col-4";
 
-    const productingId = getElement("p", "card-id");
+    const productingId = getElement("p", "card-id", id);
 
     const productingImg = document.createElement("img");
     productingImg.src = prod.img;
 
-    const productingTitle = getElement("h3", "card-title", prod.title);
+    const productingTitle = getElement("h3", "card-title", `${title}`);
     
 
-    const productingPrice  = getElement("p", "card-text", prod.price);
-    const productingIcon = getElement("s", "", prod.price);
-    const productingDate = getElement("p", "", prod.addedDate);
-    const productingBenefits = getElement("p", "", prod.benefits)
+    const productingPrice  = getElement("p", "card-text", `${price}`);
+    const productingIcon = getElement("s", "", `${price}`);
+    const productingDate = getElement("p", "", `${addedDate}`);
+    const productingBenefits = getElement("p", "", `${benefits}`)
     
     
     const productingOld = document.createElement("p"); 
@@ -45,16 +46,36 @@ const renderProduct = function (prod) {
     ProductMarker.className = "product-icon"
     const productEdit = document.createElement("button");
     productEdit.className = "btn-secondary";
-    const productDel = document.createElement("button");
+    const productDel = document.createElement("button"); 
     productDel.className = "btn-danger";
+    //productDel.setAttribute("id", `product-${id}`);
+    productDel.setAttribute("data-product", id)
     const ProductIcon = document.createElement("i");
     ProductIcon.className = "fa-pen";
+    ProductIcon.style.pointerEvents = "none";
+    const ProductBank = document.createElement("i");
+    ProductBank.className = "fa-trash";
     
+    //productEdit.append(ProductIcon);
+    //productDel.append(ProductBank)
+    //ProductMarker.append(productEdit);
+    //ProductMarker.append(productDel);
     
-    appendChilderen(prodTel,[productingId, productingImg, productingTitle, productingPrice, productingIcon, productingDate, productingBenefits, productingOld, productingModel,ProductMarker,productEdit,productDel,ProductIcon]);
+    /* productDel.addEventListener("click", function() {
+        console.log(`button biosildi ${}`);
+    } ) */
+    appendChilderen(prodTel,[productingId, productingImg, productingTitle, productingPrice, productingIcon, productingDate, productingBenefits, productingOld, productingModel,ProductMarker,productEdit,productDel,ProductIcon, ProductBank]);
     
     return producting; 
     
+}
+
+const renderProducts = function() {
+    prodTel.innerHTML = ""; 
+        products.forEach(function(productings) {
+            const producting = renderProduct(productings);
+            prodTel.append(producting);
+        })
 }
 
 const prodTel = document.querySelector("#telephones");
@@ -66,30 +87,6 @@ for (let i = 0; i < products.length; i++) {
 
     prodTel.append(producting)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 const addForm = document.querySelector("#add-form");
@@ -159,3 +156,20 @@ addEventListener("input", function() {
 
 
 
+prodTel.addEventListener("click", function(evt) {
+    if (evt.target.matches(".btn-danger")) {
+        const clickedItemId = +evt.target.dataset.product;
+        const clickedItemIndex = products.findIndex(function(productings) {
+            return productings.id === clickedItemId
+        })
+        products.splice(clickedItemIndex, 1);
+
+        renderProducts()
+    }
+})
+renderProducts()
+
+/* products.forEach(function(productings) {
+    const producting = renderProduct(productings);
+    prodTel.append(producting);
+}) */
