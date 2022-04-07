@@ -51,10 +51,10 @@ const renderProduct = function (prod) {
     const ProductMarker = getElement("div", "position-absolute top-0 end-0 d-flex");
     const productEdit = getElement("button", "btn rounded-0 btn-secondary");
     const productDel = getElement("button", "btn rounded-0 btn-danger"); 
-    productDel.setAttribute("data-product", id);
-    const ProductIcon = getElement("i","fa-solid fa-pen");
-    ProductIcon.style.pointerEvents = "none";
     const ProductBank = getElement("i", "fa-solid fa-trash");
+    const ProductIcon = getElement("i","fa-solid fa-pen");
+    productDel.setAttribute("data-product", id);
+    ProductBank.style.pointerEvents = "none";
     productsUl.append(productLi)
     productEdit.append(ProductIcon);
     productDel.append(ProductBank);
