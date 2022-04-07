@@ -9,6 +9,7 @@ const getElement = function(elName, className, textContent) {
     return createdElemment
 }
 
+//const  manufacturerChoose 
 
 const appendChilderen = function(parentElement, childeren) {
     for(let i = 0; i < childeren.length; i++) {
@@ -17,61 +18,63 @@ const appendChilderen = function(parentElement, childeren) {
 }
 
 const renderProduct = function (prod) {
-    const{id, title, price, addedDate, benefits} = prod;
-    const producting = document.createElement("li");
-    producting.className = "col-4";
+    const{id, title,model, price, addedDate,benefits } = prod;
+    const producting = getElement("li", "col-4");
+    const card = getElement("div", "card");
 
-    const productingId = getElement("p", "card-id", id);
 
     const productingImg = document.createElement("img");
     productingImg.src = prod.img;
 
+    const CardBody = getElement("div", "card-body");
+
     const productingTitle = getElement("h3", "card-title", `${title}`);
     
 
-    const productingPrice  = getElement("p", "card-text", `${price}`);
-    const productingIcon = getElement("s", "", `${price}`);
-    const productingDate = getElement("p", "", `${addedDate}`);
-    const productingBenefits = getElement("p", "", `${benefits}`)
-    
-    
-    const productingOld = document.createElement("p"); 
-    productingOld.className = "card-text";
-    productingOld.textContent = prod.price;
+    const productingPrice  = getElement("p", "card-text  fw-bold");
+    const productPriceMark = getElement("mark", "", price)
+    productingPrice.append(productPriceMark)
 
-    const productingModel = document.createElement("p");
-    productingModel.textContent = prod.model;
-    productingModel.className = "bg-success";
-    const ProductMarker = document.createElement("div");
-    ProductMarker.className = "product-icon"
-    const productEdit = document.createElement("button");
-    productEdit.className = "btn-secondary";
-    const productDel = document.createElement("button"); 
-    productDel.className = "btn-danger";
-    //productDel.setAttribute("id", `product-${id}`);
-    productDel.setAttribute("data-product", id)
-    const ProductIcon = document.createElement("i");
-    ProductIcon.className = "fa-pen";
+    const productingOldPrice  = getElement("p", "card-text");
+    const productPriceS = getElement("s", "", price)
+    productingOldPrice.append(productPriceS)
+
+
+    const productingModels = getElement("p","badge bg-success",`${model}`)
+    const productingDate = getElement("p", "", `${addedDate}`);
+    //const productingBenefits = getElement("p", "", `${benefits}`)
+
+    const productsUl = getElement("ul", "d-flex flex-wrap list-unstyled");
+    const productLi = getElement("li", "badge bg-primary me-1 mb-1", `${benefits}`);
+    
+    
+    const ProductMarker = getElement("div", "position-absolute top-0 end-0 d-flex");
+    const productEdit = getElement("button", "btn rounded-0 btn-secondary");
+    const productDel = getElement("button", "btn rounded-0 btn-danger"); 
+    productDel.setAttribute("data-product", id);
+    const ProductIcon = getElement("i","fa-solid fa-pen");
     ProductIcon.style.pointerEvents = "none";
-    const ProductBank = document.createElement("i");
-    ProductBank.className = "fa-trash";
+    const ProductBank = getElement("i", "fa-solid fa-trash");
+    productsUl.append(productLi)
+    productEdit.append(ProductIcon);
+    productDel.append(ProductBank);
+    ProductMarker.append(productEdit);
+    ProductMarker.append(productDel);    
+
     
-    //productEdit.append(ProductIcon);
-    //productDel.append(ProductBank)
-    //ProductMarker.append(productEdit);
-    //ProductMarker.append(productDel);
-    
-    /* productDel.addEventListener("click", function() {
-        console.log(`button biosildi ${}`);
-    } ) */
-    appendChilderen(prodTel,[productingId, productingImg, productingTitle, productingPrice, productingIcon, productingDate, productingBenefits, productingOld, productingModel,ProductMarker,productEdit,productDel,ProductIcon, ProductBank]);
+    appendChilderen(CardBody,[productingTitle, productingPrice, productingOldPrice, productingModels, productingDate,productLi, ProductMarker]);
+    card.append(productingImg);
+    card.append(CardBody);
+    producting.append(card);
+    CardBody.append(productsUl)
     
     return producting; 
     
 }
 
+
 const renderProducts = function() {
-    prodTel.innerHTML = ""; 
+    prodTel.innerHTML = "";
         products.forEach(function(productings) {
             const producting = renderProduct(productings);
             prodTel.append(producting);
@@ -102,15 +105,15 @@ addForm.addEventListener("submit", function(evt){
     const numberInput = elements.price;
     const productSelect = elements.manufacturer;
     const benefitsInput = elements.benefits;
-
     const titleInputValue = titleInput.value;
     const numberInputValue = numberInput.value;
     const productSelectValue = productSelect.value;
     const benefitsInputValue = benefitsInput.value;
 
-    if (titleInputValue.trim() && numberInputValue.trim() && productSelectValue.trim() && benefitsInputValue.trim()) {
+    if (titleInputValue.trim() && numberInputValue.trim() && productSelectValue.trim() && benefitsInputValue.trim() ) {
         const product = {
             id: Math.floor(Math.random() * 1000),
+            img: "https://picsum.photos/300/200",
             title: titleInputValue,
             price: numberInputValue,
             benefits: benefitsInputValue,
@@ -141,17 +144,17 @@ const benefits = [];
 addEventListener("input", function() {
     const splittedValue = input.value.trim().split(";");
 
-    if (splittedValue.length===2) {
+    if (splittedValue.length === 2) {
         benefits.push(splittedValue[2]);
         input.value = "";
 
-        for (let i = 0; i < benefits.length; i++) {
+        for (let i = 0; i > benefits.length; i++) {
             const benefit = this.document.createElement("button");
             benefit.textContent = benefits[i];
-            console.log(benefit);
             benefit.append(benefits)  
         }
     }
+    
 })
 
 
@@ -167,9 +170,4 @@ prodTel.addEventListener("click", function(evt) {
         renderProducts()
     }
 })
-renderProducts()
-
-/* products.forEach(function(productings) {
-    const producting = renderProduct(productings);
-    prodTel.append(producting);
-}) */
+    renderProducts() 
