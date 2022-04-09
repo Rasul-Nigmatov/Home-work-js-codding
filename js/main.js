@@ -49,16 +49,22 @@ const renderProduct = function (prod) {
     
     
     const ProductMarker = getElement("div", "position-absolute top-0 end-0 d-flex");
-    const productEdit = getElement("button", "btn rounded-0 btn-secondary");
-    const productDel = getElement("button", "btn rounded-0 btn-danger"); 
-    const ProductBank = getElement("i", "fa-solid fa-trash");
+    const productEditBtn = getElement("button", "btn rounded-0 btn-secondary");
+    productEditBtn.setAttribute("data-bs-toggle", "modal")
+    productEditBtn.setAttribute("data-bs-target", "#add-student-modal")
+    productEditBtn.setAttribute("dataset", id);
     const ProductIcon = getElement("i","fa-solid fa-pen");
-    productDel.setAttribute("data-product", id);
+    ProductIcon.style.pointerEvents = "none"
+    const ProductBank = getElement("i", "fa-solid fa-trash");
+
+
     ProductBank.style.pointerEvents = "none";
+    const productDel = getElement("button", "btn rounded-0 btn-danger"); 
+    productDel.setAttribute("data-product", id);
     productsUl.append(productLi)
-    productEdit.append(ProductIcon);
+    productEditBtn.append(ProductIcon);
     productDel.append(ProductBank);
-    ProductMarker.append(productEdit);
+    ProductMarker.append(productEditBtn);
     ProductMarker.append(productDel);    
 
     
@@ -73,9 +79,9 @@ const renderProduct = function (prod) {
 }
 
 
-const renderProducts = function() {
+const renderProducts = function(productsArray = products) {
     prodTel.innerHTML = "";
-        products.forEach(function(productings) {
+    productsArray.forEach(function(productings) {
             const producting = renderProduct(productings);
             prodTel.append(producting);
         })
@@ -93,7 +99,7 @@ for (let i = 0; i < products.length; i++) {
 
 
 const addForm = document.querySelector("#add-form");
-const addProductModalEl = new bootstrap.Modal(document.querySelector("#edit-student-modal"));
+const addProductModalEl = new bootstrap.Modal(document.querySelector("#add-student-modal"));
 
 addForm.addEventListener("submit", function(evt){
     evt.preventDefault();
@@ -132,6 +138,14 @@ addForm.addEventListener("submit", function(evt){
 });
 
 
+editForm = document.querySelector("#edit-form");
+const editProductModalEl = new bootstrap.Modal(document.querySelector("#edit-student-modal"));
+
+editForm.addEventListener("submit" , function(evt) {
+    evt.preventDefault();
+
+
+}) 
 
 
 const input = document.querySelector("#benefits");
@@ -159,6 +173,8 @@ addEventListener("input", function() {
 
 
 
+
+
 prodTel.addEventListener("click", function(evt) {
     if (evt.target.matches(".btn-danger")) {
         const clickedItemId = +evt.target.dataset.product;
@@ -168,6 +184,38 @@ prodTel.addEventListener("click", function(evt) {
         products.splice(clickedItemIndex, 1);
 
         renderProducts()
+    }else if (evt.target.matches(".btn-secondary")) {
+        const clickedId = +evt.target.dataset.product;
+        
+        const clickedItem = products.find(function(productings) {
+            return productings.id === clickedId
+        })
+        console.log(clickedItem);
     }
 })
     renderProducts() 
+
+
+    const filterForm = document.querySelector(".filter");
+
+    filterForm.addEventListener("submit", function(evt) {
+        evt.preventDefault();
+
+        const element = evt.target.elements;
+
+        const fromValue = element.from.value;
+        const toValue = element.to.value;
+        const filterProduct = products.filter(function(product) {
+            return product.price >= fromValue
+        })
+        renderProducts(filterProduct)
+
+        const filterProducts = products.filter(function(product) {
+            return product.price <= toValue
+        
+        }) 
+        
+        renderProducts(filterProducts)
+        
+    console.log(filterProducts);
+    })
