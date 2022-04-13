@@ -90,6 +90,7 @@ const renderProducts = function (productsArray = products) {
 let showingProducts = products;
 
 const prodTel = document.querySelector("#telephones");
+const elCount = document.querySelector(".count");
 
 
 for (let i = 0; i < products.length; i++) {
@@ -117,7 +118,7 @@ addForm.addEventListener("submit", function (evt) {
     const numberInputValue = numberInput.value;
     const productSelectValue = productSelect.value;
     const benefitsInputValue = benefitsInput.value;
-
+ 
     if (titleInputValue.trim() && numberInputValue.trim() && productSelectValue.trim() && benefitsInputValue.trim()) {
         const product = {
             id: Math.floor(Math.random() * 1000),
@@ -132,8 +133,9 @@ addForm.addEventListener("submit", function (evt) {
         products.push(product);
 
         addForm.reset();
-        addProductModalEl.hide();
+        editProductModalEl.hide();
 
+        /* elCount.textContent = `Count: ${showingProducts.length + 1}` */
         const producting = renderProduct(product);
         prodTel.append(producting);
     }
@@ -207,7 +209,9 @@ filterForm.addEventListener("submit", function (evt) {
 
     const fromValue = element.from.value;
     const toValue = element.to.value;
-    const searchValue = element.search.value
+    const searchValue = element.search.value;
+    const sortValue = element.sortby.value;
+
 
     const filterProducts = products
         .filter(function (product) {
@@ -217,10 +221,30 @@ filterForm.addEventListener("submit", function (evt) {
             
             return !toValue ? true : product.price <= toValue;
 })
+.sort (function(a, b) {
+    switch (sortValue) {
+        case "1":
+            if (a.title > b.title) {
+                return 1;
+            }else if (a.title < b.title) {
+                return -1
+            }else {
+                return 0
+            }
+        case "2":
+            return b.price - a.price
+            
+        case "3": 
+            return a.price - b.price
+    
+        default:
+            break;
+    }
+}) 
     .filter(function (product) {
         const searchRegExp = new RegExp(searchValue, "gi");
         return product.title.match(searchRegExp);
-
+        
         /* return product.title.toLowerCase().includes(searchValue.toLowerCase()) */
     });
 renderProducts(filterProducts)
@@ -231,30 +255,42 @@ const editProductModalEl = new bootstrap.Modal(document.querySelector("#edit-stu
 
 editForm.addEventListener("submit", function (evt) {
     evt.preventDefault();
-
-
     const titleEdit = document.querySelector("#edit-title");
     const priceEdit = document.querySelector("#edit-price");
     const benefitsEdit = document.querySelector("#edit-benefits");
 
 
-    if (titleInputValue.trim() && numberInputValue.trim() && productSelectValue.trim() && benefitsInputValue.trim()) {
+    
+    const elements = +evt.target.elements;
+
+    titleInputValue = elements.title;
+    priceInputValue = elements.price;
+    // productSelect = elements.manufacturer;
+    benefitsInputValue = elements.benefits;
+
+    titleEditValue = titleEdit.value;
+    priceEditValue = priceEdit.value;
+    benefitsEditValue = benefitsEdit.value;
+    // productSelectValue = productSelect.value ?? '';
+
+
+    if (titleEditValue && priceEditValue && benefitsEditValue) {
         const product = {
             id: Math.floor(Math.random() * 1000),
             img: "https://picsum.photos/300/200",
-            title: titleInputValue,
-            price: numberInputValue,
-            benefits: benefitsInputValue,
+            title: titleEditValue,
+            price: priceEditValue,
+            benefits: benefitsEditValue,
             addedDate: new Date().toISOString(),
         }
         products.push(product);
 
         addForm.reset();
         addProductModalEl.hide();
-
+        editForm.reset();
         const producting = renderProduct(product);
         prodTel.append(producting);
-        products.splice(clickedItemIndex, 1);
+        renderProducts()
 
         renderProducts()
     } else if (evt.target.matches(".btn-secondary")) {
@@ -263,9 +299,16 @@ editForm.addEventListener("submit", function (evt) {
         const clickedItem = products.find(function (productings) {
             return productings.id === clickedId
         })
-
+        
+        products.splice(clickedItem, 1)
+        
         titleEdit.value = clickedItem.title;
         priceEdit.value = clickedItem.price
         benefitsEdit.value = clickedItem.benefits;
     }
+    renderProducts()
 })
+
+/* renderProducts(queueMicrotas)
+ */
+
