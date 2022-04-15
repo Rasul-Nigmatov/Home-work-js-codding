@@ -11,20 +11,72 @@ const getElement = function (elName, className, textContent) {
 
 //const  manufacturerChoose 
 
+
 const appendChilderen = function (parentElement, childeren) {
     for (let i = 0; i < childeren.length; i++) {
         parentElement.append(childeren[i])
     }
 }
 
+const productTemplate = document.querySelector("#product-template");
+
+// const card = producting = card.querySelector(".card");
+// const cardBody = card.querySelector(".card-body");
+
 const renderProduct = function (prod) {
-    const { id, title, model, price, addedDate, benefits } = prod;
-    const producting = getElement("li", "col-4");
+    const { id,img, title, model, price, addedDate, benefits } = prod;
+    
+    
+    
+    const producting = productTemplate.content.cloneNode(true);
+    
+
+    // const productingImg = card.querySelector(".product-img");
+    // productingImg.src = img;
+
+    producting.querySelector(".product-img").src = img;
+
+    // const productingTitle = cardBody.querySelector(".card-title");
+    // productingTitle.textContent = title;
+
+    producting.querySelector(".card-title").textContent = title;
+    
+    // const productingDiscription = producting.querySelector(".card-discription");
+    // productingDiscription.textContent = price;
+
+    producting.querySelector(".card-discription").textContent = price;
+
+    // const productingText = producting.querySelector(".card-text");
+    // productingText.textContent = price;
+
+    producting.querySelector(".card-text").textContent = price;
+
+    // const productingBadge = producting.querySelector(".badge");
+    // productingBadge.textContent = model;
+
+    producting.querySelector(".badge").textContent = model;
+
+//     const productingDate = producting.querySelector(".card-date");
+// productingDate.textContent = addedDate;
+
+producting.querySelector(".card-date").textContent = addedDate;
+
+// const editDel = document.querySelector(".position-absolute top-0 end-0 d-flex");
+
+// const btnEdit  = document .querySelector(".btn");
+// const edit = btnEdit.querySelector(".btn-secondary");
+// const editI = edit.querySelector(".fa-solid fa-pen")
+
+
+
+   /*  const producting = getElement("li", "col-4");
     const card = getElement("div", "card");
 
 
     const productingImg = document.createElement("img");
     productingImg.src = prod.img;
+
+
 
     const CardBody = getElement("div", "card-body");
 
@@ -42,37 +94,37 @@ const renderProduct = function (prod) {
 
     const productingModels = getElement("p", "badge bg-success", `${model}`)
     const productingDate = getElement("p", "", `${addedDate}`);
-    //const productingBenefits = getElement("p", "", `${benefits}`)
+    // const productingBenefits = getElement("p", "", `${benefits}`)
 
     const productsUl = getElement("ul", "d-flex flex-wrap list-unstyled");
-    const productLi = getElement("li", "badge bg-primary me-1 mb-1", `${benefits}`);
+    const productLi = getElement("li", "badge bg-primary me-1 mb-1", `${benefits}`); */
 
 
-    const ProductMarker = getElement("div", "position-absolute top-0 end-0 d-flex");
-    const productEditBtn = getElement("button", "btn rounded-0 btn-secondary");
-    productEditBtn.setAttribute("data-bs-toggle", "modal")
-    productEditBtn.setAttribute("data-bs-target", "#add-student-modal")
-    productEditBtn.setAttribute("data-id", id);
-    const ProductIcon = getElement("i", "fa-solid fa-pen");
-    ProductIcon.style.pointerEvents = "none"
-    const ProductBank = getElement("i", "fa-solid fa-trash");
+    // const ProductMarker = getElement("div", "position-absolute top-0 end-0 d-flex");
+    // const productEditBtn = getElement("button", "btn rounded-0 btn-secondary");
+    // productEditBtn.setAttribute("data-bs-toggle", "modal")
+    // productEditBtn.setAttribute("data-bs-target", "#add-student-modal")
+    // productEditBtn.setAttribute("data-id", id);
+    // const ProductIcon = getElement("i", "fa-solid fa-pen");
+    // ProductIcon.style.pointerEvents = "none"
+    // const ProductBank = getElement("i", "fa-solid fa-trash");
 
 
-    ProductBank.style.pointerEvents = "none";
-    const productDel = getElement("button", "btn rounded-0 btn-danger");
-    productDel.setAttribute("data-product", id);
-    productsUl.append(productLi)
-    productEditBtn.append(ProductIcon);
-    productDel.append(ProductBank);
-    ProductMarker.append(productEditBtn);
-    ProductMarker.append(productDel);
+    // ProductBank.style.pointerEvents = "none";
+    // const productDel = getElement("button", "btn rounded-0 btn-danger");
+    // productDel.setAttribute("data-product", id);
+    // productsUl.append(productLi)
+    // productEditBtn.append(ProductIcon);
+    // productDel.append(ProductBank);
+    // ProductMarker.append(productEditBtn);
+    // ProductMarker.append(productDel);
 
 
-    appendChilderen(CardBody, [productingTitle, productingPrice, productingOldPrice, productingModels, productingDate, productLi, ProductMarker]);
-    card.append(productingImg);
-    card.append(CardBody);
-    producting.append(card);
-    CardBody.append(productsUl)
+    // appendChilderen(CardBody, [productingTitle, productingPrice, productingOldPrice, productingModels, productingDate, productLi, ProductMarker]);
+    // card.append(productingImg);
+    // card.append(CardBody);
+    // producting.append(card);
+    // CardBody.append(productsUl)
 
     return producting;
 
@@ -85,9 +137,10 @@ const renderProducts = function (productsArray = products) {
         const producting = renderProduct(productings);
         prodTel.append(producting);
     })
+    localStorage.setItem("products" , JSON.stringify(products));
 }
 
-let showingProducts = products;
+// let showingProducts = products   
 
 const prodTel = document.querySelector("#telephones");
 const elCount = document.querySelector(".count");
@@ -131,9 +184,9 @@ addForm.addEventListener("submit", function (evt) {
 
 
         products.push(product);
-
         addForm.reset();
         editProductModalEl.hide();
+        localStorage.setItem("products" , JSON.stringify(products));
 
         /* elCount.textContent = `Count: ${showingProducts.length + 1}` */
         const producting = renderProduct(product);
@@ -196,6 +249,7 @@ prodTel.addEventListener("click", function (evt) {
         priceEdit.value = clickedItem.price
         benefitsEdit.value = clickedItem.benefits;
     }
+    localStorage.setItem("products" , JSON.stringify(products));
 })
 renderProducts()
 
@@ -287,6 +341,7 @@ editForm.addEventListener("submit", function (evt) {
 
         addForm.reset();
         addProductModalEl.hide();
+        editProductModalEl.hide();
         editForm.reset();
         const producting = renderProduct(product);
         prodTel.append(producting);
@@ -305,10 +360,10 @@ editForm.addEventListener("submit", function (evt) {
         titleEdit.value = clickedItem.title;
         priceEdit.value = clickedItem.price
         benefitsEdit.value = clickedItem.benefits;
+
+        localStorage.setItem("products", JSON.stringify(products)); 
     }
     renderProducts()
 })
 
-/* renderProducts(queueMicrotas)
- */
 
